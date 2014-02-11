@@ -19,7 +19,8 @@ Realist.prototype.resolveOptions = function(args) {
 
 	for (var i in args) {
 		for (var j in this.options) {
-			if (-1 !== this.options[j].keys.indexOf(i)) {
+			var opt = this.options[j];
+			if (opt.indexOf && -1 !== opt.indexOf(i) || opt.keys && -1 !== opt.keys.indexOf(i)) {
 				result[j] = args[i];
 			}
 		}
