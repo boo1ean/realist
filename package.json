@@ -24,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/boo1ean/realist/issues"
   },
-  "homepage": "https://github.com/boo1ean/realist"
+  "homepage": "https://github.com/boo1ean/realist",
+  "dependencies": {
+    "minimist": "0.0.7"
+  }
 }
