@@ -27,5 +27,9 @@
   "homepage": "https://github.com/boo1ean/realist",
   "dependencies": {
     "minimist": "0.0.7"
+  },
+  "devDependencies": {
+    "should": "~3.1.2",
+    "mocha": "~1.17.1"
   }
 }
