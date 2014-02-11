@@ -1,0 +1,28 @@
+{
+  "name": "realist",
+  "version": "0.0.0",
+  "description": "Command line realist",
+  "main": "src/realist.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/boo1ean/realist.git"
+  },
+  "keywords": [
+    "cli",
+    "command",
+    "command-line",
+    "realist",
+    "minimist",
+    "args",
+    "argv"
+  ],
+  "author": "Egor Gumenyuk <boo1ean0807@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/boo1ean/realist/issues"
+  },
+  "homepage": "https://github.com/boo1ean/realist"
+}
