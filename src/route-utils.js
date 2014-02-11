@@ -56,7 +56,7 @@ var utils = {
 	},
 
 	matchRoute: function(route, args) {
-		var result = {};
+		var result = [];
 
 		for (var i in route) {
 			var arg = route[i];
@@ -73,7 +73,7 @@ var utils = {
 
 			} else if (args[i]) {
 
-				result[arg.name] = args[i];
+				result.push(args[i]);
 
 			}
 		}

@@ -110,7 +110,7 @@ describe('Routes utils', function() {
 
 	describe('matchRoute', function() {
 		it('Should match static route', function() {
-			var expected = {};
+			var expected = [];
 
 			var route = ['create', 'good', 'stuff'];
 			var args = ['create', 'good', 'stuff'];
@@ -119,9 +119,7 @@ describe('Routes utils', function() {
 		});
 
 		it('Should match route with required argument', function() {
-			var expected = {
-				title: 'good'
-			};
+			var expected = ['good'];
 
 			var route = [
 				'create',
@@ -134,10 +132,7 @@ describe('Routes utils', function() {
 		});
 
 		it('Should match route with optional argument', function() {
-			var expected = {
-				title: 'good',
-				target: 'day'
-			};
+			var expected = ['good', 'day'];
 
 			var route = [
 				'create',
@@ -151,10 +146,7 @@ describe('Routes utils', function() {
 		});
 
 		it('Should match route with required and optional arguments', function() {
-			var expected = {
-				title: 'good',
-				target: 'day'
-			};
+			var expected = ['day', 'good'];
 
 			var route = [
 				'create',
