@@ -106,4 +106,65 @@ describe('Routes utils', function() {
 			utils.routesSchema(routes).should.be.eql(expected);
 		});
 	});
+
+
+	describe('matchRoute', function() {
+		it('Should match static route', function() {
+			var expected = {};
+
+			var route = ['create', 'good', 'stuff'];
+			var args = ['create', 'good', 'stuff'];
+
+			utils.matchRoute(route, args).should.be.eql(expected);
+		});
+
+		it('Should match route with required argument', function() {
+			var expected = {
+				title: 'good'
+			};
+
+			var route = [
+				'create',
+				{ required: true, name: 'title' }
+			];
+
+			var args = ['create', 'good'];
+
+			utils.matchRoute(route, args).should.be.eql(expected);
+		});
+
+		it('Should match route with optional argument', function() {
+			var expected = {
+				title: 'good',
+				target: 'day'
+			};
+
+			var route = [
+				'create',
+				{ required: false, name: 'title' },
+				{ required: false, name: 'target' }
+			];
+
+			var args = ['create', 'good', 'day'];
+
+			utils.matchRoute(route, args).should.be.eql(expected);
+		});
+
+		it('Should match route with required and optional arguments', function() {
+			var expected = {
+				title: 'good',
+				target: 'day'
+			};
+
+			var route = [
+				'create',
+				{ required: true, name: 'target' },
+				{ required: false, name: 'title' }
+			];
+
+			var args = ['create', 'day', 'good'];
+
+			utils.matchRoute(route, args).should.be.eql(expected);
+		});
+	});
 });
