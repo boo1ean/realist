@@ -20,7 +20,7 @@ var sanitizeArgument = function(arg) {
 	return arg.slice(1, -1);
 };
 
-var router = {
+var utils = {
 	parseRoute: function(route) {
 		var args = route.split(' ');
 		var result = [];
@@ -41,8 +41,45 @@ var router = {
 	},
 
 	parseRoutes: function(routes) {
-		return routes.map(router.parseRoute);
+		return routes.map(utils.parseRoute);
+	},
+
+	routesSchema: function(routes) {
+		var parsed = utils.parseRoutes(routes);
+		var schema = {};
+
+		for (var i in routes) {
+			schema[routes[i]] = parsed[i];
+		}
+
+		return schema;
+	},
+
+	matchRoute: function(route, args) {
+		var result = {};
+
+		for (var i in route) {
+			var arg = route[i];
+
+			if (typeof arg === 'string') {
+
+				if (arg !== args[i]) {
+					return false;
+				}
+
+			} else if (arg.required && !args[i]) {
+
+				return false
+
+			} else if (args[i]) {
+
+				result[arg.name] = args[i];
+
+			}
+		}
+
+		return result;
 	}
 };
 
-module.exports = router;
+module.exports = utils;

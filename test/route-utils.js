@@ -1,6 +1,6 @@
-var parser = require('../src/routes-parser');
+var utils = require('../src/route-utils');
 
-describe('Routes parser', function() {
+describe('Routes utils', function() {
 	describe('parseRoute', function() {
 		it('Should find required args', function() {
 			var route = 'create <name>';
@@ -9,7 +9,7 @@ describe('Routes parser', function() {
 				{ required: true, name: 'name' }
 			];
 
-			parser.parseRoute(route).should.be.eql(expected);
+			utils.parseRoute(route).should.be.eql(expected);
 
 			route = 'create <first> <last>';
 			expected = [
@@ -18,7 +18,7 @@ describe('Routes parser', function() {
 				{ required: true, name: 'last' }
 			];
 
-			parser.parseRoute(route).should.be.eql(expected);
+			utils.parseRoute(route).should.be.eql(expected);
 		});
 
 		it('Should find optional args', function() {
@@ -28,7 +28,7 @@ describe('Routes parser', function() {
 				{ required: false, name: 'name' }
 			];
 
-			parser.parseRoute(route).should.be.eql(expected);
+			utils.parseRoute(route).should.be.eql(expected);
 
 			route = 'create [first] [last]';
 			expected = [
@@ -37,7 +37,7 @@ describe('Routes parser', function() {
 				{ required: false, name: 'last' }
 			];
 
-			parser.parseRoute(route).should.be.eql(expected);
+			utils.parseRoute(route).should.be.eql(expected);
 		});
 
 		it('Should find required and optional args', function() {
@@ -48,7 +48,7 @@ describe('Routes parser', function() {
 				{ required: false, name: 'last' }
 			];
 
-			parser.parseRoute(route).should.be.eql(expected);
+			utils.parseRoute(route).should.be.eql(expected);
 
 			var route = 'create <first> <last> [latest]';
 			var expected = [
@@ -58,7 +58,7 @@ describe('Routes parser', function() {
 				{ required: false, name: 'latest'}
 			];
 
-			parser.parseRoute(route).should.be.eql(expected);
+			utils.parseRoute(route).should.be.eql(expected);
 		});
 
 		it('Should handle long static routes', function() {
@@ -70,7 +70,7 @@ describe('Routes parser', function() {
 				'latest'
 			];
 
-			parser.parseRoute(route).should.be.eql(expected);
+			utils.parseRoute(route).should.be.eql(expected);
 		});
 	});
 
@@ -90,7 +90,7 @@ describe('Routes parser', function() {
 				['destroy', { required: true, name: 'target' }, { required: false, name: 'relations' }],
 			];
 
-			parser.parseRoutes(routes).should.be.eql(expected);
+			utils.parseRoutes(routes).should.be.eql(expected);
 		});
 	});
 });
