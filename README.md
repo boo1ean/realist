@@ -28,6 +28,8 @@ var actions = {
 new Realist(options, actions).run();
 ```
 
+Output example:
+
 ```javascript
 node app.js hello Harry Potter -w 
 {
