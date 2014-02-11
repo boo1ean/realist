@@ -74,23 +74,36 @@ describe('Routes utils', function() {
 		});
 	});
 
+	var routes = [
+		'create first last',
+		'start <task>',
+		'clean [target]',
+		'destroy <target> [relations]'
+	];
+
 	describe('parseRoutes', function() {
 		it('Should parse collection of routes', function() {
-			var routes = [
-				'create first last',
-				'start <task>',
-				'clean [target]',
-				'destroy <target> [relations]'
-			];
-
 			var expected = [
 				['create', 'first', 'last'],
 				['start', { required: true, name: 'task' }],
 				['clean', { required: false, name: 'target' }],
-				['destroy', { required: true, name: 'target' }, { required: false, name: 'relations' }],
+				['destroy', { required: true, name: 'target' }, { required: false, name: 'relations' }]
 			];
 
 			utils.parseRoutes(routes).should.be.eql(expected);
+		});
+	});
+
+	describe('routesSchema', function() {
+		it('Should create routes schema', function() {
+			var expected = {
+				'create first last': ['create', 'first', 'last'],
+				'start <task>': ['start', { required: true, name: 'task' }],
+				'clean [target]': ['clean', { required: false, name: 'target' }],
+				'destroy <target> [relations]': ['destroy', { required: true, name: 'target' }, { required: false, name: 'relations' }]
+			};
+
+			utils.routesSchema(routes).should.be.eql(expected);
 		});
 	});
 });
