@@ -24,7 +24,9 @@ describe('Realist', function() {
 
 		name: {
 			keys: ['good-enough-option']
-		}
+		},
+
+		sho: ['qwe']
 	};
 
 	var actions = {
@@ -41,7 +43,8 @@ describe('Realist', function() {
 		'nosave': true,
 		'f': 'good',
 		'storage': 'best storage',
-		'good-enough-option': 'Johny'
+		'good-enough-option': 'Johny',
+		'qwe': 'www'
 	};
 
 	var expectedOptions = {
@@ -49,7 +52,8 @@ describe('Realist', function() {
 		'nosave': true,
 		'force': 'good',
 		'storage': 'best storage',
-		'name': 'Johny'
+		'name': 'Johny',
+		'sho': 'www'
 	};
 
 	describe('resolveOptions', function() {
