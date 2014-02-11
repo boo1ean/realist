@@ -1,4 +1,4 @@
-## Command line realist [realist](https://github.com/boo1ean/realist) [![Build Status](https://travis-ci.org/boo1ean/realist.png?branch=master)](https://travis-ci.org/boo1ean/realist)
+## Command line realist [![Build Status](https://travis-ci.org/boo1ean/realist.png?branch=master)](https://travis-ci.org/boo1ean/realist)
 
 # License
 
