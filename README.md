@@ -1,6 +1,6 @@
 ## Command line realist [![Build Status](https://travis-ci.org/boo1ean/realist.png?branch=master)](https://travis-ci.org/boo1ean/realist)
 
-[minimist](https://github.com/substack/minimist) based cli app "framework"
+Micro framework for developing command line apps.
 
 ## Installation
 
@@ -175,6 +175,14 @@ node single-handler.js destroy --reason 'because wow'
 ```
 
 ### Events
+
+There some events triggered on realist app:
+
+`option <option name>` - if <option name> option was specified.
+
+`candidates` - command not found, but there are some candidates.  By default it's handled with missingRequiredArgument handler.
+
+`default` - default command was called.
 
 ```javascript
 var realist = require('realist');
