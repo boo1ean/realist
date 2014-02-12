@@ -40,12 +40,15 @@ var commandsReference = function(commands) {
 };
 
 var defaultHandler = function() {
-	var commands = commandsReference(this.commands);
+	var commands = commandsReference(omit(this.commands, 'default'));
 	var options = optionsReference(this.options);
 	console.log('Usage:');
 	console.log(commands);
-	console.log('\nOptions:');
-	console.log(options);
+
+	if (options) {
+		console.log('\nOptions:');
+		console.log(options);
+	}
 };
 
 var defaults = function(defs, obj) {
@@ -63,8 +66,8 @@ var commands = {
 };
 
 var options = {
-	version: ['v', 'version'],
-	help: ['h', 'help'],
+	'version': ['v', 'version'],
+	'help': ['h', 'help']
 };
 
 var optionsDefaults = defaults.bind(null, options);
