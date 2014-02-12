@@ -82,6 +82,11 @@ Realist.prototype.bindEvents = function(events) {
 
 Realist.prototype.triggerOptionsEvents = function(options) {
 	for (var event in options) {
+
+		if (this.stoped) {
+			return;
+		}
+
 		this.emit('option ' + event, this);
 	}
 };
