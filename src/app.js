@@ -34,6 +34,39 @@ var defaultHandler = function() {
 	console.log(options);
 };
 
+var defaults = function(defaults, obj) {
+	for (var i in commands) {
+		if (!obj[i]) {
+			obj[i] = commands[i];
+		}
+	}
+};
+
+var commands = {
+	help: defaultHandler,
+	usage: defaultHandler
+};
+
+var options = {
+	version: ['v', 'version'],
+	help: ['h', 'help'],
+};
+
+var optionsDefaults = defaults.bind(null, commands);
+var commandsDefaults = defaults.bind(null, options);
+
+var parseActions = function(actions) {
+	return actions || null;
+};
+
+var parseOptions = function(options) {
+	return options || null;
+};
+
+var parseArgv = function(argv) {
+	return minimist(argv.slice(2));
+};
+
 var missingRequiredArgs = function(opt, candidate) {
 	var route = utils.encodeRoute(candidate);
 	console.log('Missing required argument.');
@@ -43,9 +76,9 @@ var missingRequiredArgs = function(opt, candidate) {
 var Realist = function(actions, options, argv) {
 	argv = argv || process.argv;
 
-	this.args    = minimist(argv.slice(2));
-	this.actions = actions || null;
-	this.options = options || null;
+	this.args    = parseArgv(argv);
+	this.actions = parseActions(actions);
+	this.options = parseOptions(options);
 	this.name    = basename(argv[1]);
 };
 
