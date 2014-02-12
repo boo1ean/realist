@@ -41,16 +41,53 @@ node single-handler.js destroy --reason 'because wow'
 ```javascript
 var commands = {
 	// Required argument
-	'commit <target>': function(opt, target) {},
+	'commit <target>': function(opt, target) { console.log(arguments); },
 
 	// Optional argument
-	'push [remote]': function(opt, remote) {},
+	'push [remote]': function(opt, remote) { console.log(arguments); },
 
 	// Required + optional arguments
-	'reset <target> [revision]': function(opt, target, revision) {},
+	'reset <target> [revision]': function(opt, target, revision) { console.log(arguments); }
 };
 
 realist(commands);
+```
+
+Usage:
+
+```
+node commands-schema.js
+Usage:
+	commit <target>
+	push [remote]
+	reset <target> [revision]
+
+node commands-schema.js commit model
+{ '0': {}, '1': 'model' }
+
+node commands-schema.js commit model --force
+{ '0': { force: true }, '1': 'model' }
+
+node commands-schema.js commit
+Missing required argument.
+Usage: commands-schema.js commit <target>
+
+node commands-schema.js push origin
+{ '0': {}, '1': 'origin' }
+
+node commands-schema.js push
+{ '0': {} }
+
+node commands-schema.js reset model HEAD~2
+{ '0': {}, '1': 'model', '2': 'HEAD~2' }
+
+node commands-schema.js reset model -i
+{ '0': { i: true }, '1': 'model' }
+
+node commands-schema.js reset --force
+Missing required argument.
+Usage: commands-schema.js reset <target> [revision]
+boo1ean@boo1ean-mbpro: /Users/boo1ean/src/realist/examples
 ```
 
 ### Options schema
