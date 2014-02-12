@@ -1,64 +1,20 @@
 var Router = require('./router'),
     utils = require('./route-utils'),
+    _ = require('./utils'),
     minimist = require('minimist'),
-    basename = require('path').basename;
-
-var omit = function(obj, prop) {
-	var result = {};
-
-	for (var i in obj) {
-		if (i === prop) {
-			continue;
-		}
-
-		result[i] = obj[i];
-	}
-
-	return result;
-};
-
-var optionsReference = function(options) {
-	var result = [];
-
-	for (var i in options) {
-		var opt = options[i];
-		var keys = opt.length ? opt : opt.keys;
-		var message = keys.map(function(key) {
-			return (key.length === 1 ? '-' : '--') + key;
-		}).join(' ');
-
-		result.push('\t' + i + ' ' + message);
-	}
-
-	return result.join('\n');
-};
-
-var commandsReference = function(commands) {
-	return Object.keys(commands).map(function(command) {
-		return '\t' + command;
-	}).join('\n');
-};
+    basename = require('path').basename,
+	EventEmitter = require('events').EventEmitter;
 
 var defaultHandler = function() {
-	var commands = commandsReference(omit(this.commands, 'default'));
-	var options = optionsReference(this.options);
-	console.log('Usage:');
-	console.log(commands);
-
-	if (options) {
-		console.log('\nOptions:');
-		console.log(options);
-	}
+	console.log('\nWARNING: default command handler is not specified');
+	console.log('\nrealist({ \'default\': handler });\n');
 };
 
-var defaults = function(defs, obj) {
-	for (var i in defs) {
-		if (!obj[i]) {
-			obj[i] = defs[i];
-		}
-	}
-
-	return obj;
+var missingRequiredArgs = function(app, candidates) {
+	var route = utils.encodeRoute(candidates.shift());
+	console.log('Missing required argument.');
+	console.log('Usage:', app.name, route);
+	app.stop();
 };
 
 var commands = {
@@ -70,8 +26,13 @@ var options = {
 	'help': ['h', 'help']
 };
 
-var optionsDefaults = defaults.bind(null, options);
-var commandsDefaults = defaults.bind(null, commands);
+var events = {
+	'candidates': missingRequiredArgs
+};
+
+var optionsDefaults  = _.defaults.bind(null, options);
+var commandsDefaults = _.defaults.bind(null, commands);
+var eventsDefaults   = _.defaults.bind(null, events);
 
 var parseCommands = function(commands) {
 	if (typeof commands === 'function') {
@@ -86,52 +47,73 @@ var parseCommands = function(commands) {
 };
 
 var parseOptions = function(options) {
-	return options || null;
+	options = options || {};
+	return optionsDefaults(options);
 };
 
 var parseArgv = function(argv) {
 	return minimist(argv.slice(2));
 };
 
-var missingRequiredArgs = function(opt, candidate) {
-	var route = utils.encodeRoute(candidate);
-	console.log('Missing required argument.');
-	console.log('Usage:', this.name, route);
-};
-
-var Realist = function(commands, options, argv) {
+var Realist = function(commands, options, events, argv) {
 	argv = argv || process.argv;
 
 	this.args     = parseArgv(argv);
 	this.commands = parseCommands(commands);
 	this.options  = parseOptions(options);
 	this.name     = basename(argv[1]);
+	this.stoped   = false;
+
+	events = events || {};
+	this.bindEvents(eventsDefaults(events));
 };
 
-Realist.prototype.resolveOptions = function(args) {
-	if (!this.options) {
-		return omit(args, '_');
-	}
+Realist.prototype.__proto__ = EventEmitter.prototype;
 
+Realist.prototype.bindEvents = function(events) {
+	for (var event in events) {
+		var handler = events[event];
+
+		if (typeof handler === 'function') {
+			this.on(event, handler);
+		}
+	}
+};
+
+Realist.prototype.triggerOptionsEvents = function(options) {
+	for (var event in options) {
+		this.emit('option ' + event, this);
+	}
+};
+
+Realist.prototype.stop = function() {
+	this.stoped = true;
+};
+
+Realist.prototype.unstop = function() {
+	this.stoped = false;
+};
+
+Realist.prototype.resolveOptions = function(opts) {
 	var result = {};
 
-	for (var i in args) {
+	for (var i in opts) {
 		for (var j in this.options) {
 			var opt = this.options[j];
 			if (opt.indexOf && -1 !== opt.indexOf(i) || opt === i) {
-				result[j] = args[i];
+				result[j] = opts[i];
 			}
 		}
 	}
 
-	return result;
+	return _.extend(opts, result);
 };
 
 Realist.prototype.resolveCommand = function(args) {
 	if (Object.keys(this.commands).length === 1) {
 		return {
 			args: args,
-			handler: this.commands['default']
+			handler: this.commands.default
 		};
 	}
 
@@ -140,28 +122,35 @@ Realist.prototype.resolveCommand = function(args) {
 	try {
 		var command = router.resolve(args);
 	} catch (candidates) {
-		return {
-			args: candidates,
-			handler: missingRequiredArgs
-		};
+		return this.emit('candidates', this, candidates);
 	}
 
 	if (command !== false) {
 		return command;
 	}
 
+	this.emit('default', this);
+
 	return {
 		args: args,
-		handler: this.commands['default']
+		handler: this.commands.default
 	};
 };
 
 Realist.prototype.run = function() {
 	var command = this.resolveCommand(this.args._);
-	var options = this.resolveOptions(this.args);
+	var options = this.resolveOptions(_.omit(this.args, '_'));
 
-	var args = [options].concat(command.args);
-	command.handler.apply(this, args);
+	this.triggerOptionsEvents(options);
+
+	if (this.stoped) {
+		return this.unstop();
+	}
+
+	if (command) {
+		var args = [options].concat(command.args);
+		command.handler.apply(this, args);
+	}
 };
 
 module.exports = Realist;
