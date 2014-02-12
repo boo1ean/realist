@@ -35,7 +35,7 @@ var defaultHandler = function() {
 };
 
 var missingRequiredArgs = function(opt, candidate) {
-	var route = utils.decodeRoute(candidate);
+	var route = utils.encodeRoute(candidate);
 	console.log('Missing required argument.');
 	console.log('Usage:', this.name, route);
 };

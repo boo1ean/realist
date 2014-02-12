@@ -55,7 +55,7 @@ var utils = {
 		return schema;
 	},
 
-	decodeRoute: function(route) {
+	encodeRoute: function(route) {
 		return route.map(function(arg) {
 			switch (true) {
 				case arg.required:
