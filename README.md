@@ -77,10 +77,11 @@ Usage: commands-schema.js reset <target> [revision]
 ### Options schema
 
 ```javascript
+var realist = require('../');
+
 var options = {
 	'force': ['f', 'force'],
-	'ignore': ['i', 'ig', 'ignore'],
-	'silent': ['s', 'silent']
+	'ignore': ['i', 'ig', 'ignore']
 }
 
 var commands = {
@@ -101,22 +102,20 @@ Usage:
 
 ```
 node options-schema.js
-Usage:
-	show [option-name]
 
-Options:
-	force -f --force
-	ignore -i --ig --ignore
-	silent -s --silent
+WARNING: default command handler is not specified
+
+realist({ 'default': handler });
+
 ```
 
 ```
-node options-schema.js show -f -s -i
-{ force: true, silent: true, ignore: true }
+node options-schema.js show -f -i
+{ force: true, ignore: true }
 ```
 
 ```
-node options-schema.js show silent -f -s -i
+node options-schema.js show ignore -f -i
 true
 ```
 
@@ -126,13 +125,13 @@ yes really force
 ```
 
 ```
-node options-schema.js show -fsi
-{ force: true, silent: true, ignore: true }
+node options-schema.js show -fi
+{ force: true, ignore: true }
 ```
 
 ```
-node options-schema.js show --force --ig --silent
-{ force: true, ignore: true, silent: true }
+node options-schema.js show --force --ig
+{ force: true, ignore: true }
 ```
 
 ### Single handler

@@ -2,12 +2,11 @@ var realist = require('../');
 
 var options = {
 	'force': ['f', 'force'],
-	'ignore': ['i', 'ig', 'ignore'],
-	'silent': ['s', 'silent']
+	'ignore': ['i', 'ig', 'ignore']
 }
 
 var commands = {
-	// Dump options, if name is given -> dump single option
+	// Show options, if name is given -> dump single option
 	'show [option-name]': function(opt, name) {
 		if (name) {
 			console.log(opt[name]);
