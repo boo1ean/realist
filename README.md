@@ -45,8 +45,8 @@ var options = {
 }
 
 var commands = {
-	// Dump options, if name is given -> dump single option
-	'dump [option-name]': function(opt, name) {
+	// Show options, if name is given -> dump single option
+	'show [option-name]': function(opt, name) {
 		if (name) {
 			console.log(opt[name]);
 		} else {
