@@ -6,7 +6,7 @@
 
     $ npm install realist
 
-## Examples
+## Many examples
 
 ### Commands schema
 
@@ -16,17 +16,17 @@ var realist = require('realist');
 var commands = {
 	// Required argument
 	'commit <target>': function(opt, target) {
-		console.log(opt, target);
+		console.log('commit', opt, target);
 	},
 
 	// Optional argument
 	'push [remote]': function(opt, remote) {
-		console.log(opt, remote);
+		console.log('push', opt, remote);
 	},
 
 	// Required + optional arguments
 	'reset <target> [revision]': function(opt, target, revision) {
-		console.log(opt, target, revision);
+		console.log('reset', opt, target, revision);
 	},
 
 	// Default command
@@ -47,12 +47,12 @@ I am default command!
 
 ```
 node commands-schema.js commit model
-{} 'model'
+'commit' {} 'model'
 ```
 
 ```
 node commands-schema.js commit model --force
-{ force: true } 'model'
+'commit' { force: true } 'model'
 ```
 
 ```
@@ -63,22 +63,22 @@ Usage: commands-schema.js commit <target>
 
 ```
 node commands-schema.js push origin
-{} 'origin'
+'push' {} 'origin'
 ```
 
 ```
 node commands-schema.js push
-{} undefined
+'push' {} undefined
 ```
 
 ```
 node commands-schema.js reset model HEAD~2
-{} 'model' 'HEAD~2'
+'reset' {} 'model' 'HEAD~2'
 ```
 
 ```
 node commands-schema.js reset model -i
-{ i: true } 'model' undefined
+'reset' { i: true } 'model' undefined
 ```
 
 ```
@@ -170,13 +170,50 @@ node single-handler.js arg1 arg2 -s --name johny
 ```
 
 ```
-node single-handler.js arg1 arg2 -fiva
-{ f: true, i: true, v: true, a: true, version: true } 'arg1' 'arg2'
+node single-handler.js destroy --reason 'because wow'
+{ reason: 'because wow' } 'destroy' undefined
+```
+
+### Events
+
+```javascript
+var realist = require('realist');
+
+var handler = function() { 
+	console.log('I am handler.');
+};
+
+var options = {
+	'help': ['h', 'help']
+};
+
+var events = {
+	'option help': function(app) {
+		console.log('halp!');
+
+		// Stop commands execution
+		app.stop();
+	}
+}
+
+realist(handler, options, events);
+```
+
+Usage:
+
+```
+node events.js
+I am handler.
 ```
 
 ```
-node single-handler.js destroy --reason 'because wow'
-{ reason: 'because wow' } 'destroy' undefined
+node events.js --help
+halp!
+```
+
+```
+node events.js -h
+halp!
 ```
 
 # License
