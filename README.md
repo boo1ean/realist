@@ -29,7 +29,8 @@ var commands = {
 		console.log(opt, target, revision);
 	},
 
-	'default': function() {
+	// Default command
+	'default': function(opt) {
 		console.log('I am default command!');
 	}
 };
