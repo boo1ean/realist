@@ -3,9 +3,35 @@ var Router = require('./router'),
     minimist = require('minimist'),
     basename = require('path').basename;
 
+var optionsReference = function(options) {
+	var result = [];
+
+	for (var i in options) {
+		var opt = options[i];
+		var keys = opt.length ? opt : opt.keys;
+		var message = keys.map(function(key) {
+			return (key.length === 1 ? '-' : '--') + key;
+		}).join(' ');
+
+		result.push('\t' + i + ' ' + message);
+	}
+
+	return result.join('\n');
+};
+
+var actionsReference = function(actions) {
+	return Object.keys(actions).map(function(action) {
+		return '\t' + action;
+	}).join('\n');
+};
+
 var defaultHandler = function() {
-	var args = Array.prototype.slice.apply(arguments);
-	console.log('Command not found:', args.slice(1).join(' '));
+	var actions = actionsReference(this.actions);
+	var options = optionsReference(this.options);
+	console.log('Usage:');
+	console.log(actions);
+	console.log('\nOptions:');
+	console.log(options);
 };
 
 var missingRequiredArgs = function(opt, candidate) {
