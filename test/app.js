@@ -1,4 +1,4 @@
-var Realist = require('../');  
+var Realist = require('../src/app');  
 
 describe('Realist', function() {
 	var options = {
@@ -36,7 +36,7 @@ describe('Realist', function() {
 		'create <name>': function() {}
 	};
 
-	var realist = new Realist(options, actions);
+	var realist = new Realist(actions, options);
 
 	var givenOptions = {
 		'p': 'much path',
