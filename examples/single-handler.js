@@ -2,5 +2,5 @@
 var realist = require('../');
 
 realist(function(opt, arg1, arg2) {
-	console.log(arguments);
+	console.log(opt, arg1, arg2);
 });

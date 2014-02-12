@@ -11,6 +11,8 @@
 ### Commands schema
 
 ```javascript
+var realist = require('realist');
+
 var commands = {
 	// Required argument
 	'commit <target>': function(opt, target) { console.log(arguments); },
@@ -77,7 +79,7 @@ Usage: commands-schema.js reset <target> [revision]
 ### Options schema
 
 ```javascript
-var realist = require('../');
+var realist = require('realist');
 
 var options = {
 	'force': ['f', 'force'],
@@ -140,7 +142,7 @@ node options-schema.js show --force --ig
 var realist = require('realist');
 
 realist(function(opt, arg1, arg2) {
-	console.log(arguments);
+	console.log(opt, arg1, arg2);
 });
 ```
 
@@ -148,24 +150,22 @@ Usage:
 
 ```
 node single-handler.js --title hey
-{ '0': { title: 'hey' } }
+{ title: 'hey' } undefined undefined
 ```
 
 ```
 node single-handler.js arg1 arg2 -s --name johny
-{ '0': { s: true, name: 'johny' }, '1': 'arg1', '2': 'arg2' }
+{ s: true, name: 'johny' } 'arg1' 'arg2'
 ```
 
 ```
-node single-handler.js arg1 arg2 -fiva          
-{ '0': { f: true, i: true, v: true, a: true },
-  '1': 'arg1',
-  '2': 'arg2' }
+node single-handler.js arg1 arg2 -fiva
+{ f: true, i: true, v: true, a: true, version: true } 'arg1' 'arg2'
 ```
 
 ```
 node single-handler.js destroy --reason 'because wow'
-{ '0': { reason: 'because wow' }, '1': 'destroy' }
+{ reason: 'because wow' } 'destroy' undefined
 ```
 
 # License
