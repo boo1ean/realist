@@ -3,6 +3,20 @@ var Router = require('./router'),
     minimist = require('minimist'),
     basename = require('path').basename;
 
+var omit = function(obj, prop) {
+	var result = {};
+
+	for (var i in obj) {
+		if (i === prop) {
+			continue;
+		}
+
+		result[i] = obj[i];
+	}
+
+	return result;
+};
+
 var optionsReference = function(options) {
 	var result = [];
 
@@ -19,32 +33,33 @@ var optionsReference = function(options) {
 	return result.join('\n');
 };
 
-var actionsReference = function(actions) {
-	return Object.keys(actions).map(function(action) {
-		return '\t' + action;
+var commandsReference = function(commands) {
+	return Object.keys(commands).map(function(command) {
+		return '\t' + command;
 	}).join('\n');
 };
 
 var defaultHandler = function() {
-	var actions = actionsReference(this.actions);
+	var commands = commandsReference(this.commands);
 	var options = optionsReference(this.options);
 	console.log('Usage:');
-	console.log(actions);
+	console.log(commands);
 	console.log('\nOptions:');
 	console.log(options);
 };
 
-var defaults = function(defaults, obj) {
-	for (var i in commands) {
+var defaults = function(defs, obj) {
+	for (var i in defs) {
 		if (!obj[i]) {
-			obj[i] = commands[i];
+			obj[i] = defs[i];
 		}
 	}
+
+	return obj;
 };
 
 var commands = {
-	help: defaultHandler,
-	usage: defaultHandler
+	'default': defaultHandler
 };
 
 var options = {
@@ -52,11 +67,19 @@ var options = {
 	help: ['h', 'help'],
 };
 
-var optionsDefaults = defaults.bind(null, commands);
-var commandsDefaults = defaults.bind(null, options);
+var optionsDefaults = defaults.bind(null, options);
+var commandsDefaults = defaults.bind(null, commands);
 
-var parseActions = function(actions) {
-	return actions || null;
+var parseCommands = function(commands) {
+	if (typeof commands === 'function') {
+		return commandsDefaults({ 'default': commands });
+	}
+
+	if (commands) {
+		return commandsDefaults(commands);
+	}
+
+	return null;
 };
 
 var parseOptions = function(options) {
@@ -73,18 +96,18 @@ var missingRequiredArgs = function(opt, candidate) {
 	console.log('Usage:', this.name, route);
 };
 
-var Realist = function(actions, options, argv) {
+var Realist = function(commands, options, argv) {
 	argv = argv || process.argv;
 
-	this.args    = parseArgv(argv);
-	this.actions = parseActions(actions);
-	this.options = parseOptions(options);
-	this.name    = basename(argv[1]);
+	this.args     = parseArgv(argv);
+	this.commands = parseCommands(commands);
+	this.options  = parseOptions(options);
+	this.name     = basename(argv[1]);
 };
 
 Realist.prototype.resolveOptions = function(args) {
 	if (!this.options) {
-		return args;
+		return omit(args, '_');
 	}
 
 	var result = {};
@@ -92,7 +115,7 @@ Realist.prototype.resolveOptions = function(args) {
 	for (var i in args) {
 		for (var j in this.options) {
 			var opt = this.options[j];
-			if (opt.indexOf && -1 !== opt.indexOf(i) || opt.keys && -1 !== opt.keys.indexOf(i)) {
+			if (opt.indexOf && -1 !== opt.indexOf(i) || opt === i) {
 				result[j] = args[i];
 			}
 		}
@@ -101,18 +124,18 @@ Realist.prototype.resolveOptions = function(args) {
 	return result;
 };
 
-Realist.prototype.resolveAction = function(args) {
-	if (typeof this.actions === 'function') {
+Realist.prototype.resolveCommand = function(args) {
+	if (Object.keys(this.commands).length === 1) {
 		return {
 			args: args,
-			handler: this.actions
+			handler: this.commands['default']
 		};
 	}
 
-	var router = new Router(this.actions);
+	var router = new Router(this.commands);
 
 	try {
-		var action = router.resolve(args);
+		var command = router.resolve(args);
 	} catch (candidates) {
 		return {
 			args: candidates,
@@ -120,22 +143,22 @@ Realist.prototype.resolveAction = function(args) {
 		};
 	}
 
-	if (action !== false) {
-		return action;
+	if (command !== false) {
+		return command;
 	}
 
 	return {
 		args: args,
-		handler: defaultHandler
+		handler: this.commands['default']
 	};
 };
 
 Realist.prototype.run = function() {
-	var action = this.resolveAction(this.args._);
+	var command = this.resolveCommand(this.args._);
 	var options = this.resolveOptions(this.args);
 
-	var args = [options].concat(action.args);
-	action.handler.apply(this, args);
+	var args = [options].concat(command.args);
+	command.handler.apply(this, args);
 };
 
 module.exports = Realist;
