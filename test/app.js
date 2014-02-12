@@ -38,7 +38,7 @@ describe('Realist', function() {
 	};
 
 	describe('resolveOptions', function() {
-		it('Should resolve options according to option map', function() {
+		xit('Should resolve options according to option map', function() {
 			realist.resolveOptions(givenOptions).should.be.eql(expectedOptions);
 		});
 	});
