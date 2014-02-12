@@ -21,11 +21,8 @@ realist(function(opt, arg1, arg2) {
 Usage:
 
 ```
-node single-handler.js 
-{ '0': {} }
-
-node single-handler.js -s --name johny
-{ '0': { s: true, name: 'johny' } }
+node single-handler.js --title hey
+{ '0': { title: 'hey' } }
 
 node single-handler.js arg1 arg2 -s --name johny
 { '0': { s: true, name: 'johny' }, '1': 'arg1', '2': 'arg2' }
