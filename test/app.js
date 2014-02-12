@@ -2,31 +2,12 @@ var Realist = require('../src/app');
 
 describe('Realist', function() {
 	var options = {
-		path: {
-			keys: ['p', 'path'],
-			description: 'Path to migrations base directory'
-		},
-
-		force: {
-			keys: ['f', 'force'],
-			description: 'Force down all migrations'
-		},
-
-		nosave: {
-			keys: ['n', 'nosave'],
-			description: 'Do not save migrations data to storage'
-		},
-
-		storage: {
-			keys: ['s', 'storage'],
-			description: 'Use specific migrations storage'
-		},
-
-		name: {
-			keys: ['good-enough-option']
-		},
-
-		sho: ['qwe']
+		path: ['p', 'path'],
+		force: ['f', 'force'],
+		nosave: ['n', 'nosave'],
+		storage: ['s', 'storage'],
+		name: 'good-enough-option',
+		sho: 'qwe'
 	};
 
 	var actions = {
