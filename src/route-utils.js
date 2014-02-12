@@ -53,6 +53,21 @@ var utils = {
 		}
 
 		return schema;
+	},
+
+	decodeRoute: function(route) {
+		return route.map(function(arg) {
+			switch (true) {
+				case arg.required:
+					return '<' + arg.name + '>';
+
+				case !!arg.name:
+					return '[' + arg.name + ']';
+
+				default:
+					return arg;
+			}
+		}).join(' ');
 	}
 };
 
