@@ -53,32 +53,6 @@ var utils = {
 		}
 
 		return schema;
-	},
-
-	matchRoute: function(route, args) {
-		var result = [];
-
-		for (var i in route) {
-			var arg = route[i];
-
-			if (typeof arg === 'string') {
-
-				if (arg !== args[i]) {
-					return false;
-				}
-
-			} else if (arg.required && !args[i]) {
-
-				return false
-
-			} else if (args[i]) {
-
-				result.push(args[i]);
-
-			}
-		}
-
-		return result;
 	}
 };
 

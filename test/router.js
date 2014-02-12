@@ -61,10 +61,55 @@ describe('Router', function() {
 		router.resolve(args).should.be.eql(expected);
 	});
 
-	it('Should return false if required argument was not given', function() {
-		var args = ['create'];
-		var expected = false;
+	describe('match', function() {
+		it('Should match static route', function() {
+			var expected = [];
 
-		router.resolve(args).should.be.eql(expected);
+			var route = ['create', 'good', 'stuff'];
+			var args = ['create', 'good', 'stuff'];
+
+			router.match(route, args).should.be.eql(expected);
+		});
+
+		it('Should match route with required argument', function() {
+			var expected = ['good'];
+
+			var route = [
+				'create',
+				{ required: true, name: 'title' }
+			];
+
+			var args = ['create', 'good'];
+
+			router.match(route, args).should.be.eql(expected);
+		});
+
+		it('Should match route with optional argument', function() {
+			var expected = ['good', 'day'];
+
+			var route = [
+				'create',
+				{ required: false, name: 'title' },
+				{ required: false, name: 'target' }
+			];
+
+			var args = ['create', 'good', 'day'];
+
+			router.match(route, args).should.be.eql(expected);
+		});
+
+		it('Should match route with required and optional arguments', function() {
+			var expected = ['day', 'good'];
+
+			var route = [
+				'create',
+				{ required: true, name: 'target' },
+				{ required: false, name: 'title' }
+			];
+
+			var args = ['create', 'day', 'good'];
+
+			router.match(route, args).should.be.eql(expected);
+		});
 	});
 });
