@@ -29,20 +29,17 @@ Usage:
 
 ```
 node commands-schema.js
-Usage:
-	commit <target>
-	push [remote]
-	reset <target> [revision]
+I am default command!
 ```
 
 ```
 node commands-schema.js commit model
-{ '0': {}, '1': 'model' }
+{} 'model'
 ```
 
 ```
 node commands-schema.js commit model --force
-{ '0': { force: true }, '1': 'model' }
+{ force: true } 'model'
 ```
 
 ```
@@ -53,22 +50,22 @@ Usage: commands-schema.js commit <target>
 
 ```
 node commands-schema.js push origin
-{ '0': {}, '1': 'origin' }
+{} 'origin'
 ```
 
 ```
 node commands-schema.js push
-{ '0': {} }
+{} undefined
 ```
 
 ```
 node commands-schema.js reset model HEAD~2
-{ '0': {}, '1': 'model', '2': 'HEAD~2' }
+{} 'model' 'HEAD~2'
 ```
 
 ```
 node commands-schema.js reset model -i
-{ '0': { i: true }, '1': 'model' }
+{ i: true } 'model' undefined
 ```
 
 ```
