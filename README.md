@@ -1,6 +1,6 @@
-## WARNING: MODULE IS UNDER CONSTRUCTION
-
 ## Command line realist [![Build Status](https://travis-ci.org/boo1ean/realist.png?branch=master)](https://travis-ci.org/boo1ean/realist)
+
+[minimist](https://github.com/substack/minimist) based cli app "framework"
 
 ## Installation
 
