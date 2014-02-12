@@ -23,15 +23,21 @@ Usage:
 ```
 node single-handler.js --title hey
 { '0': { title: 'hey' } }
+```
 
+```
 node single-handler.js arg1 arg2 -s --name johny
 { '0': { s: true, name: 'johny' }, '1': 'arg1', '2': 'arg2' }
+```
 
+```
 node single-handler.js arg1 arg2 -fiva          
 { '0': { f: true, i: true, v: true, a: true },
   '1': 'arg1',
   '2': 'arg2' }
+```
 
+```
 node single-handler.js destroy --reason 'because wow'
 { '0': { reason: 'because wow' }, '1': 'destroy' }
 ```
@@ -61,33 +67,48 @@ Usage:
 	commit <target>
 	push [remote]
 	reset <target> [revision]
+```
 
+```
 node commands-schema.js commit model
 { '0': {}, '1': 'model' }
+```
 
+```
 node commands-schema.js commit model --force
 { '0': { force: true }, '1': 'model' }
+```
 
+```
 node commands-schema.js commit
 Missing required argument.
 Usage: commands-schema.js commit <target>
+```
 
+```
 node commands-schema.js push origin
 { '0': {}, '1': 'origin' }
+```
 
+```
 node commands-schema.js push
 { '0': {} }
+```
 
+```
 node commands-schema.js reset model HEAD~2
 { '0': {}, '1': 'model', '2': 'HEAD~2' }
+```
 
+```
 node commands-schema.js reset model -i
 { '0': { i: true }, '1': 'model' }
+```
 
+```
 node commands-schema.js reset --force
 Missing required argument.
 Usage: commands-schema.js reset <target> [revision]
-boo1ean@boo1ean-mbpro: /Users/boo1ean/src/realist/examples
 ```
 
 ### Options schema
@@ -111,6 +132,44 @@ var commands = {
 };
 
 realist(commands, options);
+```
+
+Usage:
+
+```
+node options-schema.js
+Usage:
+	show [option-name]
+
+Options:
+	force -f --force
+	ignore -i --ig --ignore
+	silent -s --silent
+```
+
+```
+node options-schema.js show -f -s -i
+{ force: true, silent: true, ignore: true }
+```
+
+```
+node options-schema.js show silent -f -s -i
+true
+```
+
+```
+node options-schema.js show force --force 'yes really force'
+yes really force
+```
+
+```
+node options-schema.js show -fsi
+{ force: true, silent: true, ignore: true }
+```
+
+```
+node options-schema.js show --force --ig --silent
+{ force: true, ignore: true, silent: true }
 ```
 
 # License
