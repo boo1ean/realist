@@ -6,47 +6,56 @@
 
     $ npm install realist
 
-## Usage
+## Examples
 
-Example app:
+### Single handler
 
 ```javascript
-var Realist = require('../');
+var realist = require('realist');
 
-var options = {
-	whoop: ['w', 'whoop'],
-	silent: ['s', 'si', 'silent'],
-	email: ['e', 'email']
+realist(function(opt, arg1, arg2) {
+	console.log(arguments);
+});
+```
+
+### Commands schema
+
+```javascript
+var commands = {
+	// Required argument
+	'commit <target>': function(opt, target) {},
+
+	// Optional argument
+	'push [remote]': function(opt, remote) {},
+
+	// Required + optional arguments
+	'reset <target> [revision]': function(opt, target, revision) {},
 };
 
-var actions = {
-	'hello <first> [last]': function(opt, first, last) {
-		console.log(arguments);
+realist(commands);
+```
+
+### Optionas schema
+
+```javascript
+var options = {
+	'force': ['f', 'force'],
+	'ignore': ['i', 'ig', 'ignore'],
+	'silent': ['s', 'silent']
+}
+
+var commands = {
+	// Dump options, if name is given -> dump single option
+	'dump [option-name]': function(opt, name) {
+		if (name) {
+			console.log(opt[name]);
+		} else {
+			console.log(opt);
+		}
 	}
 };
 
-new Realist(options, actions).run();
-```
-
-Output example:
-
-```javascript
-node app.js hello Harry Potter -w 
-{ '0': { whoop: true }, '1': 'Harry', '2': 'Potter' }
-
-node app.js hello Harry --silent --whoop
-{ '0': { silent: true, whoop: true } '1': 'Harry' }
-
-node app.js hello Harry -ws --email harry@potter.com
-{ '0': { whoop: true, silent: true, email: 'harry@potter.com' }, '1': 'Harry' }
-
-node app.js hello Harry
-{ '0': {}, '1': 'Harry' }
-
-// Don't pass required param
-node app.js hello
-Missing required argument.
-Usage: app.js hello <first> [last]
+realist(commands, options);
 ```
 
 # License
