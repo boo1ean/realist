@@ -32,33 +32,21 @@ Output example:
 
 ```javascript
 node app.js hello Harry Potter -w 
-{
-	'0': { whoop: true },
-	'1': 'Harry',
-	'2': 'Potter'
-}
+{ '0': { whoop: true }, '1': 'Harry', '2': 'Potter' }
 
 node app.js hello Harry --silent --whoop
-{
-	'0': { silent: true, whoop: true }
-	'1': 'Harry'
-}
+{ '0': { silent: true, whoop: true } '1': 'Harry' }
 
 node app.js hello Harry -ws --email harry@potter.com
-{
-	'0': { whoop: true, silent: true, email: 'harry@potter.com' },
-	'1': 'Harry'
-}
+{ '0': { whoop: true, silent: true, email: 'harry@potter.com' }, '1': 'Harry' }
 
 node app.js hello Harry
-{
-	'0': {},
-	'1': 'Harry'
-}
+{ '0': {}, '1': 'Harry' }
 
 // Don't pass required param
 node app.js hello
-Command not found: hello
+Missing required argument.
+Usage: app.js hello <first> [last]
 ```
 
 # License

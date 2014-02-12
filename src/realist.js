@@ -1,9 +1,17 @@
 var Router = require('./router'),
-    minimist = require('minimist');
+    utils = require('./route-utils'),
+    minimist = require('minimist'),
+    basename = require('path').basename;
 
 var defaultHandler = function() {
 	var args = Array.prototype.slice.apply(arguments);
 	console.log('Command not found:', args.slice(1).join(' '));
+};
+
+var missingRequiredArgs = function(opt, candidate) {
+	var route = utils.decodeRoute(candidate);
+	console.log('Missing required argument.');
+	console.log('Usage:', this.name, route);
 };
 
 var Realist = function(options, actions, argv) {
@@ -12,6 +20,7 @@ var Realist = function(options, actions, argv) {
 	this.args    = minimist(argv.slice(2));
 	this.actions = actions || {};
 	this.options = options || {};
+	this.name    = basename(argv[1]);
 };
 
 Realist.prototype.resolveOptions = function(args) {
@@ -31,7 +40,15 @@ Realist.prototype.resolveOptions = function(args) {
 
 Realist.prototype.resolveAction = function(args) {
 	var router = new Router(this.actions);
-	var action = router.resolve(args);
+
+	try {
+		var action = router.resolve(args);
+	} catch (candidates) {
+		return {
+			args: candidates,
+			handler: missingRequiredArgs
+		};
+	}
 
 	if (action !== false) {
 		return action;
