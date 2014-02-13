@@ -147,6 +147,10 @@ Realist.prototype.run = function() {
 
 	this.triggerOptionsEvents(options);
 
+	if (this.stoped) {
+		return this.unstop();
+	}
+
 	if (command) {
 		if (command.default) {
 			this.emit('default', this);
