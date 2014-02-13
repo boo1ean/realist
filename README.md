@@ -227,6 +227,7 @@ halp!
 ## Real world usages
 
 - [mgrt - database migration tool](https://github.com/boo1ean/mgrt/blob/master/bin/mgrt#L63-L129)
+- [capo - events management tool](https://github.com/msemenistyi/capo/blob/master/bin/capo_cli.js)
 
 # License
 
