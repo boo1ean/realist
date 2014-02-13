@@ -224,6 +224,10 @@ node events.js -h
 halp!
 ```
 
+## Real world usages
+
+- [mgrt - database migration tool](https://github.com/boo1ean/mgrt/blob/master/bin/mgrt#L63-L129)
+
 # License
 
 The MIT License (MIT)
