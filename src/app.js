@@ -134,10 +134,9 @@ Realist.prototype.resolveCommand = function(args) {
 		return command;
 	}
 
-	this.emit('default', this);
-
 	return {
 		args: args,
+		default: true,
 		handler: this.commands.default
 	};
 };
@@ -153,6 +152,10 @@ Realist.prototype.run = function() {
 	}
 
 	if (command) {
+		if (command.default) {
+			this.emit('default', this);
+		}
+
 		var args = [options].concat(command.args);
 		command.handler.apply(this, args);
 	}
