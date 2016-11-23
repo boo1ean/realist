@@ -45,7 +45,7 @@ Router.prototype.match = function(route, args) {
 			this.candidates.push(route);
 			return false
 
-		} else if (args[i]) {
+		} else if (typeof args[i] !== undefined) {
 
 			result.push(args[i]);
 
